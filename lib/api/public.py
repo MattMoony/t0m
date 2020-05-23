@@ -8,6 +8,7 @@ import requests as req
 import json, dateutil.parser
 
 def get_user(uname: str) -> User:
+    """Get one Tellonym user"""
     res = req.get(urls.USER_INFO.format(uname))
     if res.status_code != 200:
         return None
@@ -15,7 +16,8 @@ def get_user(uname: str) -> User:
     return User(obj['avatarFileName'], obj['followerCount']+obj['anonymousFollowerCount'], obj['followingCount'], obj['id'], obj['displayName'],
                 obj['username'], obj['aboutMe'], obj['likesCount'], obj['answerCount'], obj['tellCount'], obj['isVerified'])
 
-def get_posts(uname: str) -> List[Answer]:
+def get_answers(uname: str) -> List[Answer]:
+    """Get all answers a user has ever given."""
     u = get_user(uname)
     c = 0
     ans = []
