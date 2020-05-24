@@ -19,7 +19,7 @@ def main():
               ^"==="`                         
 """)
 
-    cmd.start()    
+    cmd.start()
 
 if __name__ == '__main__':
     main()

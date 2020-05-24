@@ -204,3 +204,27 @@ def get_all_answers(uid: int, con: Optional[sqlite3.Connection] = None) -> List[
     """
     anss = fetchall('SELECT * FROM answers WHERE user = ?', uid, con=con)
     return [Answer(*a) for a in anss]
+
+def get_total_of_answers(uname: Optional[str] = None, con: Optional[sqlite3.Connection] = None) -> int:
+    """
+    Gets the total amount of answers that are stored in the sqlite db.
+
+    Parameters
+    ----------
+    uname : Optional[str]
+        To only count answers by this user.
+    con : Optional[sqlite3.Connection]
+        Connection to the db.
+
+    Returns
+    -------
+    int
+        The total amount of answers.
+    """
+    if uname:
+        noans = fetchone('SELECT COUNT(*) FROM answers a INNER JOIN users u ON a.user = u.id WHERE u.uname = ?', uname, con=con)
+    else:
+        noans = fetchone('SELECT COUNT(*) FROM answers', con=con)
+    if not noans:
+        return 0
+    return noans[0]

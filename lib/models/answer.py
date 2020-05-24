@@ -1,6 +1,7 @@
 """Defines an answer class"""
 
-import datetime
+import datetime, dateutil.parser
+from typing import Union
 from lib import db
 from lib.models.user import User
 
@@ -24,6 +25,8 @@ class Answer(object):
         The original tell (question).
     user : User
         The user that answered the question.
+    parent_id : int
+        The id of the previous tell to which this is a follow-up.
 
     Methods
     -------
@@ -31,22 +34,23 @@ class Answer(object):
         Stores/updates the answer in the sqlite database.
     """
 
-    def __init__(self, id: int, answer: str, likes: int, created: datetime.datetime, 
-                       tell: str, user: User):
+    def __init__(self, id: int, answer: str, likes: int, created: Union[datetime.datetime, str], 
+                       tell: str, user: User, parent_id: int):
         self.id: int = id
         self.answer: str = answer
         self.likes: int = likes
-        self.created: datetime.datetime = created
+        self.created: datetime.datetime = created if isinstance(created, datetime.datetime) else dateutil.parser.parse(created)
         self.tell: str = tell
         self.user: User = user
+        self.parent_id: int = parent_id
         self.store()
 
     def store(self) -> None:
         """Stores/updates the answer in the sqlite database."""
         con, c = db.connect()
         if not db.exists('SELECT * FROM answers WHERE id = ?', self.id, con=con):
-            c.execute('INSERT INTO answers VALUES (?, ?, ?, ?, ?, ?)', (self.id, self.answer, 
-                      self.likes, self.created, self.tell, self.user.id,))
+            c.execute('INSERT INTO answers VALUES (?, ?, ?, ?, ?, ?, ?)', (self.id, self.answer, 
+                      self.likes, self.created, self.tell, self.user.id, self.parent_id,))
         c.execute('UPDATE answers SET answer=?, likes=?, created=?, tell=?, user=? '+\
                   'WHERE id = ?', (self.answer, self.likes, self.created, self.tell, 
                   self.user.id, self.id,))
@@ -54,4 +58,4 @@ class Answer(object):
 
     def __str__(self) -> str:
         """Returns a short string representation of the answer."""
-        return '[Q]: {}?\n[A]: {}'.format(self.tell, self.answer)
+        return '[Q]: {} || [A]: {} || [{}]'.format(self.tell, self.answer, self.created.isoformat())
