@@ -52,7 +52,8 @@ def on_find(cmd: pcmd.Command, args: List[str], uname: str, substr: str) -> None
     """Callback for `find` - gets all of a user's answers containing a substring"""
     substr = substr.lower()
     u = db.get_user(uname)
-    res = db.fetchall('SELECT a.* FROM answers a INNER JOIN users u ON a.user = u.id WHERE u.uname = ? AND LOWER(a.answer) LIKE ? OR LOWER(a.tell) LIKE ?', 
+    print(uname)
+    res = db.fetchall('SELECT a.* FROM answers a INNER JOIN users u ON a.user = u.id WHERE u.uname = ? AND (LOWER(a.answer) LIKE ? OR LOWER(a.tell) LIKE ?)', 
                       uname, '%'+substr+'%', '%'+substr+'%')
     match = re.compile(substr, re.IGNORECASE)
     repma = lambda s: match.sub(cr.Fore.LIGHTMAGENTA_EX+substr+cr.Fore.RESET, s)
