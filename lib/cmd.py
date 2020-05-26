@@ -59,7 +59,7 @@ def on_find(cmd: pcmd.Command, args: List[str], uname: str, substr: str) -> None
     repma = lambda s: match.sub(cr.Fore.LIGHTMAGENTA_EX+substr+cr.Fore.RESET, s)
     print(' Matches:')
     for a in [Answer(*r[:-2], u, r[-1]) for r in res]:
-        print('  -> [Q]: %s || [A]: %s || [%s]' % (repma(a.tell), repma(a.answer), a.created.isoformat()))
+        print('  -> [Q]: %s || [A]: %s || [%s]' % (repma(a.tell or ''), repma(a.answer or ''), a.created.isoformat()))
     print(' A total of %s%d%s answers by %s%s%s match the current substring.' % (cr.Fore.LIGHTGREEN_EX, len(res), cr.Fore.RESET, cr.Fore.LIGHTCYAN_EX,
           uname, cr.Fore.RESET))
 

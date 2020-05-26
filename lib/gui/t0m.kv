@@ -1,0 +1,28 @@
+#:kivy 1.11.1
+
+BoxLayout:
+    orientation: "vertical"
+    spacing: 10
+    padding: 10
+
+    BoxLayout:
+        orientation: "horizontal"
+        spacing: 5
+        padding: 0
+        size_hint_y: .15
+
+        DropDown:
+            size_hint: .4, 1
+
+            Button:
+                text: "Hello World!"
+            Button:
+                text: "asdf"
+
+        TextInput:
+            size_hint: .6, 1
+            text: "Enter query ... "
+
+    Label:
+        text: "Hello World!"
+        size_hint_y: .85
