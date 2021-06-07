@@ -6,7 +6,7 @@ idna==2.9
 Kivy==1.11.1
 Kivy-Garden==0.1.4
 pash-cmd==0.0.2
-Pygments==2.6.1
+Pygments==2.7.4
 python-dateutil==2.8.1
 requests==2.23.0
 six==1.15.0
